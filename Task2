@@ -1,0 +1,129 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+
+public class StudentGrades {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Grade> grades = new ArrayList<>();
+
+        while (true) {
+            System.out.println("Student Grades Management System");
+            System.out.println("1. Add Grade");
+            System.out.println("2. Calculate Average Grade");
+            System.out.println("3. Display Overall Grade Information");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    addGrade(scanner, grades);
+                    break;
+                case 2:
+                    calculateAverageGrade(grades);
+                    break;
+                case 3:
+                    displayOverallGradeInfo(grades);
+                    break;
+                case 4:
+                    System.out.println("Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid choice, please try again.");
+            }
+        }
+    }
+
+    private static void addGrade(Scanner scanner, List<Grade> grades) {
+        System.out.print("Enter subject name: ");
+        String subject = scanner.nextLine();
+        System.out.print("Enter grade (0-100): ");
+        double grade = scanner.nextDouble();
+        scanner.nextLine(); 
+
+        grades.add(new Grade(subject, grade));
+        System.out.println("Grade added successfully.");
+    }
+
+    private static void calculateAverageGrade(List<Grade> grades) {
+        if (grades.isEmpty()) {
+            System.out.println("No grades available to calculate average.");
+            return;
+        }
+        double average = GradeCalculator.calculateAverage(grades);
+        System.out.println("Average grade: " + average);
+    }
+
+    private static void displayOverallGradeInfo(List<Grade> grades) {
+        if (grades.isEmpty()) {
+            System.out.println("No grades available to display.");
+            return;
+        }
+        double average = GradeCalculator.calculateAverage(grades);
+        String letterGrade = GradeCalculator.calculateLetterGrade(average);
+        double gpa = GradeCalculator.calculateGPA(average);
+
+        System.out.println("Overall Grade Information:");
+        System.out.println("Average Grade: " + average);
+        System.out.println("Letter Grade: " + letterGrade);
+        System.out.println("GPA: " + gpa);
+    }
+}
+
+class Grade {
+    private String subject;
+    private double grade;
+
+    public Grade(String subject, double grade) {
+        this.subject = subject;
+        this.grade = grade;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public double getGrade() {
+        return grade;
+    }
+}
+
+class GradeCalculator {
+    public static double calculateAverage(List<Grade> grades) {
+        double total = 0;
+        for (Grade grade : grades) {
+            total += grade.getGrade();
+        }
+        return total / grades.size();
+    }
+
+    public static String calculateLetterGrade(double average) {
+        if (average >= 90) {
+            return "A";
+        } else if (average >= 80) {
+            return "B";
+        } else if (average >= 70) {
+            return "C";
+        } else if (average >= 60) {
+            return "D";
+        } else {
+            return "F";
+        }
+    }
+
+    public static double calculateGPA(double average) {
+        if (average >= 90) {
+            return 4.0;
+        } else if (average >= 80) {
+            return 3.0;
+        } else if (average >= 70) {
+            return 2.0;
+        } else if (average >= 60) {
+            return 1.0;
+        } else {
+            return 0.0;
+        }
+    }
+}
